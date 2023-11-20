@@ -1,33 +1,49 @@
 package com.example.project
 
+import android.content.Context
 import android.os.Bundle
-import android.widget.Button
+import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val btnMenu = findViewById<Button>(R.id.button_menu)
-        val btnFavorites = findViewById<Button>(R.id.button_favorites)
-        val btnLater = findViewById<Button>(R.id.button_later)
-        val btnCollections = findViewById<Button>(R.id.button_collections)
-        val btnSettings = findViewById<Button>(R.id.button_settings)
-        btnMenu.setOnClickListener{
-            Toast.makeText(this, "Меню", Toast.LENGTH_SHORT).show()
+
+        val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
+        val bottom_navigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.settings -> {
+                    Toast.makeText(this, "Настройки", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
         }
-        btnFavorites.setOnClickListener{
-            Toast.makeText(this, "Избранное", Toast.LENGTH_SHORT).show()
-        }
-        btnLater.setOnClickListener{
-            Toast.makeText(this, "Посмотреть позже", Toast.LENGTH_SHORT).show()
-        }
-        btnCollections.setOnClickListener{
-            Toast.makeText(this, "Подборка", Toast.LENGTH_SHORT).show()
-        }
-        btnSettings.setOnClickListener{
-            Toast.makeText(this, "Настройка", Toast.LENGTH_SHORT).show()
+
+        bottom_navigation.setOnNavigationItemSelectedListener {
+            Log.d("YAYAYA", "${it.itemId}")
+            when (it.itemId) {
+                R.id.favorites -> {
+                    Toast.makeText(this, "Избранное", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.watch_later -> {
+                    Toast.makeText(this, "Посмотреть похже", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.selections -> {
+                    Toast.makeText(this, "Подборки", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
         }
     }
 }
