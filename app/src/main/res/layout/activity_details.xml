@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/details_id"
     tools:context=".DetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -70,5 +71,15 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        android:layout_gravity="top"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/navigation_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
