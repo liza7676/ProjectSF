@@ -47,6 +47,15 @@ class FavoritesFragment : Fragment() {
                 addItemDecoration(decorator)
             }
         //Кладем нашу БД в RV
-        filmsAdapter.addItems(favoritesList)
+        val fileList = (requireActivity() as MainActivity).fileList
+        val tempList: MutableList <Film> = mutableListOf()
+        if (fileList != null) {
+            val fl = fileList.getListFilm()
+            fl.forEach {
+                if (it.isInFavorites)
+                    tempList += it
+            }
+            filmsAdapter.addItems(tempList)
+        }
     }
 }
