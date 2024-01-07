@@ -28,7 +28,7 @@ class DetailsFragment : Fragment() {
         val details_toolbar = view.findViewById<Toolbar>(R.id.details_toolbar)
         val details_poster = view.findViewById<AppCompatImageView>(R.id.details_poster)
         val details_description = view.findViewById<TextView>(R.id.details_description)
-        val film = film1 as Film
+        val film = film1
         //Устанавливаем заголовок
         details_toolbar.title = film.title
         //Устанавливаем картинку
