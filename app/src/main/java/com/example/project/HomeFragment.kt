@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Scene
@@ -19,6 +20,12 @@ import java.util.*
 class HomeFragment : Fragment() {
 
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+
+    init {
+        exitTransition = android.transition.Slide(Gravity.START)
+            .apply { duration = 800;mode = android.transition.Slide.MODE_OUT }
+        reenterTransition = android.transition.Slide(Gravity.START).apply { duration = 800; }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
