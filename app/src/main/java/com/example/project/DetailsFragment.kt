@@ -3,9 +3,7 @@ package com.example.project
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import android.os.Bundle
-import android.transition.Slide
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +13,6 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DetailsFragment : Fragment() {
-    init {
-        enterTransition = Slide(Gravity.END).apply { duration = 800 }
-        returnTransition = Slide(Gravity.END).apply { duration = 800;mode = Slide.MODE_OUT }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
