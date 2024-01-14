@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
@@ -76,6 +77,9 @@ class HomeFragment : Fragment() {
                 return true
             }
         })
+
+        val home_fragment_root = view.findViewById<ConstraintLayout>(R.id.home_fragment_root)
+        AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
     }
 
 }
