@@ -23,6 +23,7 @@ class RatingDonutView  @JvmOverloads constructor(context: Context, attributeSet:
     private lateinit var strokePaint: Paint
     private lateinit var digitPaint: Paint
     private lateinit var circlePaint: Paint
+    private var ofset = 0f
 
     init {
         //Получаем атрибуты и устанавливаем их в соответствующие поля
@@ -111,7 +112,7 @@ class RatingDonutView  @JvmOverloads constructor(context: Context, attributeSet:
         //Рисуем задний фон(Желательно его отрисовать один раз в bitmap, так как он статичный)
         canvas.drawCircle(0f, 0f, radius, circlePaint)
         //Рисуем "арки", из них и будет состоять наше кольцо + у нас тут специальный метод
-        canvas.drawArc(oval, -90f, convertProgressToDegrees(progress), false, strokePaint)
+        canvas.drawArc(oval, -90f + ofset, convertProgressToDegrees(progress) , false, strokePaint)
         //Восстанавливаем канвас
         canvas.restore()
     }
@@ -136,6 +137,10 @@ class RatingDonutView  @JvmOverloads constructor(context: Context, attributeSet:
         drawRating(canvas)
         //Рисуем цифры
         drawText(canvas)
+        if (ofset < 360f){
+            postInvalidateDelayed(50)
+            ofset += 2f
+        }
     }
 
     private fun chooseDimension(mode: Int, size: Int) =
