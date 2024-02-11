@@ -9,27 +9,26 @@ import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project.databinding.FragmentFavoritesBinding
+import com.example.project.databinding.FragmentHomeBinding
 import java.util.*
 
 class HomeFragment : Fragment() {
-
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainRecycler = view.findViewById<RecyclerView>(R.id.main_recycler)
-        val searchView = view.findViewById<SearchView>(R.id.search_view)
-
-        mainRecycler.apply {
+        binding.mainRecycler.apply {
             //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
             //оставим его пока пустым, он нам понадобится во второй части задания
             filmsAdapter = FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener{
@@ -51,11 +50,11 @@ class HomeFragment : Fragment() {
         if (fileList != null)
             filmsAdapter.addItems(fileList.getListFilm())
 
-        searchView.setOnClickListener {
-            searchView.isIconified = false
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
         }
         //Подключаем слушателя изменений введенного текста в поиска
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -78,8 +77,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        val home_fragment_root = view.findViewById<ConstraintLayout>(R.id.home_fragment_root)
-        AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
     }
 
 }

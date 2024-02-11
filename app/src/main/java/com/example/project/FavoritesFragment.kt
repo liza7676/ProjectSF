@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {
+    private lateinit var binding: FragmentFavoritesBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
     }
 
@@ -22,16 +23,14 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false)
+        binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Получаем список при транзакции фрагмента
-        val favoritesList: List<Film> = emptyList()
-        val favorites_recycler = view.findViewById<RecyclerView>(R.id.favorites_recycler)
-        favorites_recycler
+        binding.favoritesRecycler
             .apply {
                 filmsAdapter =
                     FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
@@ -59,8 +58,6 @@ class FavoritesFragment : Fragment() {
             filmsAdapter.addItems(tempList)
         }
 
-        val favorites = view.findViewById<FrameLayout>(R.id.favorites)
-        AnimationHelper.performFragmentCircularRevealAnimation(favorites, requireActivity(), 2)
-
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.favorites, requireActivity(), 2)
     }
 }
