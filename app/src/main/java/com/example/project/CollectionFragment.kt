@@ -5,34 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.project.databinding.CollectionsFragmentBinding
+import com.example.project.databinding.FragmentFavoritesBinding
 
 class CollectionFragment : Fragment() {
-    private lateinit var filmsAdapter: FilmListRecyclerAdapter
+    private lateinit var binding: CollectionsFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.collections_fragment, container, false)
+        binding = CollectionsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val collection = view.findViewById<FrameLayout>(R.id.collection)
-        AnimationHelper.performFragmentCircularRevealAnimation(collection, requireActivity(), 4)
-
-
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.collection, requireActivity(), 4)
     }
 }

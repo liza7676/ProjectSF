@@ -1,16 +1,23 @@
 package com.example.project
 
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.BindingAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 import com.airbnb.lottie.LottieAnimationView
+import com.example.project.databinding.ActivityMainBinding
+
+
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private var backPress = 0L
     val fileList:FilmList = FilmList()
 
@@ -29,11 +36,10 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val bottom_navigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             Log.d("YAYAYA", "${it.itemId}")
             when (it.itemId) {
                 R.id.favorites -> {
