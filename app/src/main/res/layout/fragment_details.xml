@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:id="@+id/details_id"
     android:background="@drawable/collections"
-    tools:context=".DetailsFragment">
+    tools:context=".view.fragments.DetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"

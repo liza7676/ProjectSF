@@ -8,7 +8,7 @@
     android:visibility="invisible"
     tools:visibility="visible"
     android:id="@+id/watch_later"
-    tools:context=".LaterFragment">
+    tools:context=".view.fragments.LaterFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorites_recycler"

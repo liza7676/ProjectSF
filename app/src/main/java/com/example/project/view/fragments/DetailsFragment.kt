@@ -1,20 +1,14 @@
-package com.example.project
+package com.example.project.view.fragments
 
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import androidx.fragment.app.Fragment
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.Toolbar
-import androidx.databinding.BindingAdapter
-import com.example.project.databinding.CollectionsFragmentBinding
+import com.example.project.R
 import com.example.project.databinding.FragmentDetailsBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.project.domain.Film
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding

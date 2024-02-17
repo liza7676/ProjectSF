@@ -1,21 +1,39 @@
-package com.example.project
+package com.example.project.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.project.databinding.FragmentFavoritesBinding
+import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
+import com.example.project.MainActivity
+import com.example.project.view.rv_adapters.TopSpacingItemDecoration
 import com.example.project.databinding.FragmentHomeBinding
+import com.example.project.domain.Film
+import com.example.project.utils.AnimationHelper
+import com.example.project.viewmodel.HomeFragmentViewModel
 import java.util.*
 
 class HomeFragment : Fragment() {
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    }
     private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+    private var filmsDataBase = listOf<Film>()
+        //Используем backing field
+        set(value) {
+            //Если придет такое же значение, то мы выходим из метода
+            if (field == value) return
+            //Если пришло другое значение, то кладем его в переменную
+            field = value
+            //Обновляем RV адаптер
+            filmsAdapter.addItems(field)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,6 +96,9 @@ class HomeFragment : Fragment() {
         })
 
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
+            filmsDataBase = it
+        })
     }
 
 }

@@ -1,11 +1,12 @@
-package com.example.project
+package com.example.project.view.rv_viewholders
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project.R
+import com.example.project.domain.Film
+import com.example.project.view.customviews.RatingDonutView
 
 //В конструктор класс передается layout, который мы создали(film_item.xml)
 class FilmViewHolder( private val itemView: View

@@ -1,13 +1,12 @@
-package com.example.project
+package com.example.project.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.CollectionsFragmentBinding
-import com.example.project.databinding.FragmentFavoritesBinding
+import com.example.project.utils.AnimationHelper
 
 class CollectionFragment : Fragment() {
     private lateinit var binding: CollectionsFragmentBinding
