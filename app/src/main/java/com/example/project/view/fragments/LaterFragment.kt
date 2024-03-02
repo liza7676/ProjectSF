@@ -1,17 +1,13 @@
-package com.example.project
+package com.example.project.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.project.databinding.FragmentDetailsBinding
-import com.example.project.databinding.FragmentHomeBinding
+import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.databinding.LaterFragmentBinding
+import com.example.project.utils.AnimationHelper
 
 class LaterFragment : Fragment() {
     private lateinit var binding: LaterFragmentBinding

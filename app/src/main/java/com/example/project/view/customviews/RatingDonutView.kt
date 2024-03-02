@@ -1,9 +1,10 @@
-package com.example.project
+package com.example.project.view.customviews
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.example.project.R
 
 class RatingDonutView  @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null) : View(context, attributeSet) {
 
@@ -139,7 +140,7 @@ class RatingDonutView  @JvmOverloads constructor(context: Context, attributeSet:
         drawText(canvas)
         if (ofset < 360f){
             postInvalidateDelayed(50)
-            ofset += 2f
+            ofset += 10f
         }
     }
 
