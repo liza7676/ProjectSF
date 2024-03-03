@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.example.project.MainActivity
 import com.example.project.R
+import com.example.project.data.ApiConstants
 import com.example.project.databinding.FragmentDetailsBinding
 import com.example.project.domain.Film
 
@@ -29,7 +32,10 @@ class DetailsFragment : Fragment() {
         //Устанавливаем заголовок
         binding.detailsToolbar.title = film.title
         //Устанавливаем картинку
-        binding.detailsPoster.setImageResource(film.poster)
+        Glide.with(this)
+            .load(ApiConstants.IMAGES_URL + "w780" + film.poster)
+            .centerCrop()
+            .into(binding.detailsPoster)
         //Устанавливаем описание
         binding.detailsDescription.text = film.description
 
@@ -41,9 +47,11 @@ class DetailsFragment : Fragment() {
             if (!film.isInFavorites) {
                 binding.detailsFabFavorites.setImageResource(R.drawable.ic_baseline_favorite_24)
                 film.isInFavorites = true
+                (requireActivity() as MainActivity).fileFavList += film
             } else {
                 binding.detailsFabFavorites.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 film.isInFavorites = false
+                (requireActivity() as MainActivity).fileFavList -= film
             }
         }
         binding.detailsFabShare.setOnClickListener {

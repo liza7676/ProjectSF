@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var backPress = 0L
-    val fileList:FilmList = FilmList()
+    var fileFavList = listOf<Film>()
+    var pageView = 1
 
     //Ищем фрагмент по тегу, если он есть то возвращаем его, если нет, то null
     private fun checkFragmentExistence(tag: String): Fragment? =
