@@ -12,7 +12,6 @@ import com.example.project.view.rv_adapters.TopSpacingItemDecoration
 import com.example.project.databinding.FragmentFavoritesBinding
 import com.example.project.domain.Film
 import com.example.project.utils.AnimationHelper
-import com.example.project.FilmList
 
 class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
@@ -51,15 +50,15 @@ class FavoritesFragment : Fragment() {
                 addItemDecoration(decorator)
             }
         //Кладем нашу БД в RV
-        val fileList = (requireActivity() as MainActivity).fileList
-        val tempList: MutableList <Film> = mutableListOf()
+        val fileList = (requireActivity() as MainActivity).fileFavList
+        var tempList = listOf<Film>()
         if (fileList != null) {
-            val fl = fileList.getListFilm()
-            fl.forEach {
+            fileList.forEach {
                 if (it.isInFavorites)
                     tempList += it
             }
-            filmsAdapter.addItems(tempList)
+            if (!fileList.isEmpty())
+                filmsAdapter.addItems(tempList)
         }
 
         AnimationHelper.performFragmentCircularRevealAnimation(binding.favorites, requireActivity(), 2)

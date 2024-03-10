@@ -25,6 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var filmsDataBase = listOf<Film>()
+        get() = field
         //Используем backing field
         set(value) {
             //Если придет такое же значение, то мы выходим из метода
@@ -63,11 +64,6 @@ class HomeFragment : Fragment() {
             addItemDecoration(decorator)
 
         }
-        //Кладем нашу БД в RV
-        val fileList = (requireActivity() as MainActivity).fileList
-        if (fileList != null)
-            filmsAdapter.addItems(fileList.getListFilm())
-
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
         }
@@ -81,11 +77,11 @@ class HomeFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 //Если ввод пуст то вставляем в адаптер всю БД
                 if (newText == null || newText.isEmpty()) {
-                    filmsAdapter.addItems(fileList.getListFilm())
+                    filmsAdapter.addItems(filmsDataBase)
                     return true
                 }
                 //Фильтруем список на поискк подходящих сочетаний
-                val result = fileList.getListFilm().filter {
+                val result = filmsDataBase.filter {
                     //Чтобы все работало правильно, нужно и запрос, и имя фильма приводить к нижнему регистру
                     it.title.lowercase(Locale.getDefault()).contains(newText.lowercase(Locale.getDefault()))
                 }

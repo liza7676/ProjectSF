@@ -19,7 +19,7 @@ class RatingDonutView  @JvmOverloads constructor(context: Context, attributeSet:
     //Значение прогресса от 0 - 100
     private var progress = 50
     //Значения размера текста внутри кольца
-    private var scaleSize = 60f
+    private var scaleSize = 40f
     //Краски для наших фигур
     private lateinit var strokePaint: Paint
     private lateinit var digitPaint: Paint

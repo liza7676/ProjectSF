@@ -4,7 +4,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.project.R
+import com.example.project.data.ApiConstants
 import com.example.project.domain.Film
 import com.example.project.view.customviews.RatingDonutView
 
@@ -23,7 +25,10 @@ class FilmViewHolder( private val itemView: View
         //Устанавливаем заголовок
         title.text = film.title
         //Устанавливаем постер
-        poster.setImageResource(film.poster)
+        Glide.with(itemView)
+            .load(ApiConstants.IMAGES_URL + "w780" + film.poster)
+            .centerCrop()
+            .into(poster)
         //Устанавливаем описание
         description.text = film.description
         //Устанавливаем рэйтинг
