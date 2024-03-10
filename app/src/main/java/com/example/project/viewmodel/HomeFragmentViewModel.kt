@@ -5,10 +5,14 @@ import androidx.lifecycle.ViewModel
 import com.example.project.App
 import com.example.project.domain.Film
 import com.example.project.domain.Interactor
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class HomeFragmentViewModel : ViewModel() {
-    val filmsListLiveData = MutableLiveData<List<Film>>()
-    private var interactor: Interactor = App.instance.interactor
+class HomeFragmentViewModel : ViewModel(), KoinComponent {
+    val filmsListLiveData:  MutableLiveData<List<Film>> = MutableLiveData()
+    //Инициализируем интерактор
+    private val interactor: Interactor by inject()
+   // private var interactor: Interactor = App.instance.interactor
     init {
         interactor.getFilmsFromApi(1, object : ApiCallback {
             override fun onSuccess(films: List<Film>) {
