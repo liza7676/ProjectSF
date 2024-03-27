@@ -21,4 +21,9 @@
         android:icon="@drawable/ic_baseline_collections"
         android:title="@string/btn_collections"
         app:showAsAction="withText"/>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="НАСТРОЙКИ"
+        app:showAsAction="withText"/>
 </menu>
