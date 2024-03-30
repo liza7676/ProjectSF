@@ -8,11 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.ActivityMainBinding
 import com.example.project.domain.Film
-import com.example.project.view.fragments.HomeFragment
-import com.example.project.view.fragments.CollectionFragment
-import com.example.project.view.fragments.DetailsFragment
-import com.example.project.view.fragments.FavoritesFragment
-import com.example.project.view.fragments.LaterFragment
+import com.example.project.view.fragments.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -66,6 +62,12 @@ class MainActivity : AppCompatActivity() {
                     val fragment = checkFragmentExistence(tag)
                     //В первом параметре, если фрагмент не найден и метод вернул null, то с помощью
                     changeFragment(fragment ?: HomeFragment(), tag)
+                    true
+                }
+                R.id.settings -> {
+                    val tag = "settings"
+                    val fragment = checkFragmentExistence(tag)
+                    changeFragment( fragment?: SettingsFragment(), tag)
                     true
                 }
                 else -> false
