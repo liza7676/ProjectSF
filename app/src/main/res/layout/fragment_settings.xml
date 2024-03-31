@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/settings_fragment_root"
+    android:orientation="vertical"
     android:background="@drawable/background_settings"
     tools:context=".view.fragments.SettingsFragment">
 
@@ -54,4 +55,19 @@
             android:text="@string/radio_button_playing"/>
     </RadioGroup>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/btn_clearCache"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Очитстить кэш"/>
+
+    <Button
+        android:id="@+id/btn_ClearInCacheBadFilms"
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удалить фильмы с рейтенгом ниже 8.0"/>
+
+</LinearLayout>
