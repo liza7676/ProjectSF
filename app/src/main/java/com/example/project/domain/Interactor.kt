@@ -4,12 +4,14 @@ import com.example.project.data.API
 import com.example.project.data.MainRepository
 import com.example.project.data.PreferenceProvider
 import com.example.project.data.TmdbApi
+import com.example.project.data.entity.Film
 import com.example.project.data.entity.TmdbResultsDto
 import com.example.project.utils.Converter
 import com.example.project.viewmodel.HomeFragmentViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class Interactor(private val repo: MainRepository, private val retrofitService: TmdbApi,
     private val preferences: PreferenceProvider
@@ -24,8 +26,10 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
                val list = Converter.convertApiListToDtoList(response.body()?.tmdbFilms)
                 //Кладем фильмы в бд
                 list.forEach {
-                    repo.putToDb(film = it)
+                    repo.putToDb(list)
                 }
+                val data: Calendar = Calendar.getInstance()
+                preferences.saveDounloadTime(data.timeInMillis)
                 callback.onSuccess(list)
             }
 
@@ -41,7 +45,10 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
     }
     //Метод для получения настроек
     fun getDefaultCategoryFromPreferences() = preferences.getDefaultCategory()
-
+    fun getDounloadTimeFromPreferences() = preferences.getDounloadTime()
+    fun saveDounloadTimeFromPreferences(data: Long) {
+        preferences.saveDounloadTime(data)
+    }
     fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
 
     fun clearCache() = repo.clearCache()

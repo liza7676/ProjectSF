@@ -13,7 +13,7 @@ import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.MainActivity
 import com.example.project.view.rv_adapters.TopSpacingItemDecoration
 import com.example.project.databinding.FragmentHomeBinding
-import com.example.project.domain.Film
+import com.example.project.data.entity.Film
 import com.example.project.utils.AnimationHelper
 import com.example.project.viewmodel.HomeFragmentViewModel
 import java.util.*

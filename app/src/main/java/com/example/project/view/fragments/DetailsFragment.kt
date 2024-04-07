@@ -11,7 +11,7 @@ import com.example.project.MainActivity
 import com.example.project.R
 import com.example.project.data.ApiConstants
 import com.example.project.databinding.FragmentDetailsBinding
-import com.example.project.domain.Film
+import com.example.project.data.entity.Film
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding

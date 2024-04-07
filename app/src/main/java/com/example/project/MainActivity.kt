@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.ActivityMainBinding
-import com.example.project.domain.Film
+import com.example.project.data.entity.Film
 import com.example.project.view.fragments.*
 
 
