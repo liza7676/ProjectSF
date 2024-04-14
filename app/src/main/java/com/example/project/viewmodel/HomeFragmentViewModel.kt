@@ -3,8 +3,10 @@ package com.example.project.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.project.App
-import com.example.project.domain.Film
+import com.example.project.data.entity.Film
 import com.example.project.domain.Interactor
+import java.util.*
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class HomeFragmentViewModel : ViewModel() {
@@ -17,15 +19,26 @@ class HomeFragmentViewModel : ViewModel() {
         getFilms()
     }
     fun getFilms() {
-        interactor.getFilmsFromApi(1, object : ApiCallback {
-            override fun onSuccess(films: List<Film>) {
-                filmsListLiveData.postValue(films)
-            }
+        val dataCur = Calendar.getInstance().timeInMillis
+        val data = interactor.getDounloadTimeFromPreferences()
+        if ((dataCur - data) > 600000){
+            interactor.clearCache()
+            interactor.getFilmsFromApi(1, object : ApiCallback {
+                override fun onSuccess(films: List<Film>) {
+                    filmsListLiveData.postValue(films)
+                }
 
-            override fun onFailure() {
+                override fun onFailure() {
+                    Executors.newSingleThreadExecutor().execute {
+                        filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                    }
+                }
+            })
+        } else {
+            Executors.newSingleThreadExecutor().execute {
                 filmsListLiveData.postValue(interactor.getFilmsFromDB())
             }
-        })
+        }
     }
 
     interface ApiCallback {

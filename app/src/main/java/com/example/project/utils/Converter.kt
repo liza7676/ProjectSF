@@ -1,6 +1,6 @@
 package com.example.project.utils
 
-import com.example.project.domain.Film
+import com.example.project.data.entity.Film
 import com.example.project.data.entity.TmdbFilm
 
 object Converter {
