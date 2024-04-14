@@ -1,5 +1,6 @@
 package com.example.project.data.DAO
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.project.data.entity.Film
 
@@ -7,7 +8,7 @@ import com.example.project.data.entity.Film
 interface FilmDao {
     //Запрос на всю таблицу
     @Query("SELECT * FROM cached_films")
-    fun getCachedFilms(): List<Film>
+    fun getCachedFilms(): LiveData<List<Film>>
 
     //Кладём списком в БД, в случае конфликта перезаписываем
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -20,5 +21,5 @@ interface FilmDao {
     fun deleteFilm(film: Film)
 
     @Query("SELECT * FROM cached_films WHERE vote_average BETWEEN :minAge  AND :maxAge")
-    fun getCachedFilmsGood(minAge: Double, maxAge: Double): List<Film>
+    fun getCachedFilmsGood(minAge: Double, maxAge: Double): LiveData<List<Film>>
 }
