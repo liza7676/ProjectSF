@@ -1,5 +1,6 @@
 package com.example.project.domain
 
+import androidx.lifecycle.LiveData
 import com.example.project.data.API
 import com.example.project.data.MainRepository
 import com.example.project.data.PreferenceProvider
@@ -30,7 +31,7 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
                 }
                 val data: Calendar = Calendar.getInstance()
                 preferences.saveDounloadTime(data.timeInMillis)
-                callback.onSuccess(list)
+                callback.onSuccess()
             }
 
             override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
@@ -49,7 +50,7 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
     fun saveDounloadTimeFromPreferences(data: Long) {
         preferences.saveDounloadTime(data)
     }
-    fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
+    fun getFilmsFromDB(): LiveData<List<Film>> = repo.getAllFromDB()
 
     fun clearCache() = repo.clearCache()
 
