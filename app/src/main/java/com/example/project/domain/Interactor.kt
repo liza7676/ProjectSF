@@ -57,10 +57,7 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
     }
     //Метод для получения настроек
     fun getDefaultCategoryFromPreferences() = preferences.getDefaultCategory()
-    fun getDounloadTimeFromPreferences() = preferences.getDounloadTime()
-    fun saveDounloadTimeFromPreferences(data: Long) {
-        preferences.saveDounloadTime(data)
-    }
+
     fun getFilmsFromDB(): Flow<List<Film>> = repo.getAllFromDB()
 
     fun clearCache() = repo.clearCache()

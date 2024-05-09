@@ -19,14 +19,11 @@ class MainRepository(private val filmDao: FilmDao) {
     private lateinit var scope: CoroutineScope
     fun putToDb(films: List<Film>) {
         //Запросы в БД должны быть в отдельном потоке
-        Executors.newSingleThreadExecutor().execute {
             filmDao.insertAll(films)
-        }
     }
 
-    fun getAllFromDB(): Flow<List<Film>> {
-        return filmDao.getCachedFilms()
-    }
+    fun getAllFromDB(): Flow<List<Film>> = filmDao.getCachedFilms()
+
     //Очистка кэша
     fun clearCache(){
         scope = CoroutineScope(Dispatchers.IO).also { scope ->
