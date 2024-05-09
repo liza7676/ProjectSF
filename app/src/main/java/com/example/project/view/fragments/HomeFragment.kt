@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
@@ -16,9 +17,12 @@ import com.example.project.databinding.FragmentHomeBinding
 import com.example.project.data.entity.Film
 import com.example.project.utils.AnimationHelper
 import com.example.project.viewmodel.HomeFragmentViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class HomeFragment : Fragment() {
+    private lateinit var scope: CoroutineScope
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
@@ -92,13 +96,26 @@ class HomeFragment : Fragment() {
         })
         initPullToRefresh()
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-            filmsDataBase = it
-            filmsAdapter.addItems(it)
-        })
-        viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
-            binding.progressBar.visibility = if(it) View.VISIBLE else View.INVISIBLE
-        })
+        scope = CoroutineScope(Dispatchers.IO).also { scope ->
+            scope.launch {
+                viewModel.filmsListData.collect {
+                    withContext(Dispatchers.Main) {
+                        filmsAdapter.addItems(it)
+                        filmsDataBase = it
+                    }
+                }
+            }
+            scope.launch {
+                for (element in viewModel.showProgressBar) {
+                    launch(Dispatchers.Main) {
+                        binding.progressBar.isVisible = element
+                    }
+                }
+            }
+        }
+//        viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
+//            binding.progressBar.visibility = if(it) View.VISIBLE else View.INVISIBLE
+//        })
     }
     private fun initPullToRefresh() {
         //Вешаем слушатель, чтобы вызвался pull to refresh
@@ -110,5 +127,10 @@ class HomeFragment : Fragment() {
             //Убираем крутящиеся колечко
             binding.pullToRefresh.isRefreshing = false
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        scope.cancel()
     }
 }

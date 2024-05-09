@@ -5,9 +5,18 @@ import android.database.Cursor
 import androidx.lifecycle.LiveData
 import com.example.project.data.DAO.FilmDao
 import com.example.project.data.entity.Film
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.first as first1
+import kotlinx.coroutines.flow.toList as toList
 
 class MainRepository(private val filmDao: FilmDao) {
+    private lateinit var scope: CoroutineScope
     fun putToDb(films: List<Film>) {
         //Запросы в БД должны быть в отдельном потоке
         Executors.newSingleThreadExecutor().execute {
@@ -15,23 +24,34 @@ class MainRepository(private val filmDao: FilmDao) {
         }
     }
 
-    fun getAllFromDB(): LiveData<List<Film>> {
+    fun getAllFromDB(): Flow<List<Film>> {
         return filmDao.getCachedFilms()
     }
     //Очистка кэша
     fun clearCache(){
-        Executors.newSingleThreadExecutor().execute {
-            val list = filmDao.getCachedFilms().value?.toList()
-            if (list != null)
-                filmDao.deleteDB(list)
+        scope = CoroutineScope(Dispatchers.IO).also { scope ->
+            scope.launch {
+            val list = filmDao.getCachedFilms()
+                list.collect {
+                    withContext(Dispatchers.Main) {
+                        filmDao.deleteDB(it)
+                    }
+                }
+            }
         }
     }
     //Очистить кэш от фильмов с рейтингом ниже 8.0
     fun clearInCacheBadFilms(){
-        Executors.newSingleThreadExecutor().execute {
-            val list = filmDao.getCachedFilmsGood(0.0, 7.99)
-            list.value?.forEach{
-                filmDao.deleteFilm(it)
+        scope = CoroutineScope(Dispatchers.IO).also { scope ->
+            scope.launch {
+                val list = filmDao.getCachedFilmsGood(0.0, 7.99)
+                list.collect {
+                    withContext(Dispatchers.Main) {
+                        it.forEach {
+                            filmDao.deleteFilm(it)
+                        }
+                    }
+                }
             }
         }
     }
