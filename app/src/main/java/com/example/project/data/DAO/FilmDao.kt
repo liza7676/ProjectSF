@@ -2,13 +2,14 @@ package com.example.project.data.DAO
 
 import androidx.room.*
 import com.example.project.data.entity.Film
+import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FilmDao {
     //Запрос на всю таблицу
     @Query("SELECT * FROM cached_films")
-    fun getCachedFilms(): Flow<List<Film>>
+    fun getCachedFilms(): Observable<List<Film>>
 
     //Кладём списком в БД, в случае конфликта перезаписываем
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,5 +22,5 @@ interface FilmDao {
     fun deleteFilm(film: Film)
 
     @Query("SELECT * FROM cached_films WHERE vote_average BETWEEN :minAge  AND :maxAge")
-    fun getCachedFilmsGood(minAge: Double, maxAge: Double): Flow<List<Film>>
+    fun getCachedFilmsGood(minAge: Double, maxAge: Double): Observable<List<Film>>
 }
