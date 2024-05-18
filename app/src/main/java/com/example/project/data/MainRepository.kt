@@ -5,6 +5,11 @@ import android.database.Cursor
 import androidx.lifecycle.LiveData
 import com.example.project.data.DAO.FilmDao
 import com.example.project.data.entity.Film
+import com.example.project.utils.AutoDisposable
+import com.example.project.utils.addTo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,40 +21,35 @@ import kotlinx.coroutines.flow.first as first1
 import kotlinx.coroutines.flow.toList as toList
 
 class MainRepository(private val filmDao: FilmDao) {
-    private lateinit var scope: CoroutineScope
+    private val autoDisposable = AutoDisposable()
     fun putToDb(films: List<Film>) {
         //Запросы в БД должны быть в отдельном потоке
             filmDao.insertAll(films)
     }
 
-    fun getAllFromDB(): Flow<List<Film>> = filmDao.getCachedFilms()
+    fun getAllFromDB(): Observable<List<Film>> = filmDao.getCachedFilms()
 
     //Очистка кэша
     fun clearCache(){
-        scope = CoroutineScope(Dispatchers.IO).also { scope ->
-            scope.launch {
-            val list = filmDao.getCachedFilms()
-                list.collect {
-                    withContext(Dispatchers.Main) {
-                        filmDao.deleteDB(it)
-                    }
+
+        val cachedFilms = filmDao.getCachedFilms()
+        cachedFilms.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { list ->
+                    filmDao.deleteDB(list)
                 }
-            }
-        }
+                .addTo(autoDisposable)
     }
     //Очистить кэш от фильмов с рейтингом ниже 8.0
     fun clearInCacheBadFilms(){
-        scope = CoroutineScope(Dispatchers.IO).also { scope ->
-            scope.launch {
-                val list = filmDao.getCachedFilmsGood(0.0, 7.99)
-                list.collect {
-                    withContext(Dispatchers.Main) {
-                        it.forEach {
-                            filmDao.deleteFilm(it)
-                        }
-                    }
+        val cachedFilms = filmDao.getCachedFilmsGood(0.0, 7.99)
+        cachedFilms.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { list ->
+                list.forEach {
+                    filmDao.deleteFilm(it)
                 }
             }
-        }
+            .addTo(autoDisposable)
     }
 }
