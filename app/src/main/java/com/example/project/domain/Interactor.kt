@@ -65,4 +65,9 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
     fun clearCache() = repo.clearCache()
 
     fun clearInCacheBadFilms() = repo.clearInCacheBadFilms()
+
+    fun getSearchResultFromApi(search: String): Observable<List<Film>> = retrofitService.getFilmFromSearch(API.apiKey, "ru-RU", search, 1)
+        .map {
+            Converter.convertApiListToDtoList(it.tmdbFilms)
+        }
 }
