@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -20,10 +20,14 @@ import com.example.project.utils.AutoDisposable
 import com.example.project.utils.addTo
 import com.example.project.viewmodel.HomeFragmentViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     private val viewModel by lazy {
@@ -62,6 +66,55 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
+        }
+        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+            //Вешаем слушатель на клавиатуру
+            binding.searchView.setOnQueryTextListener(object :
+            //Вызывается на ввод символов
+                SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String): Boolean {
+                    filmsAdapter.items.clear()
+                    subscriber.onNext(newText)
+                    return false
+                }
+                //Вызывается по нажатию кнопки "Поиск"
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    subscriber.onNext(query)
+                    return false
+                }
+            })
+        })
+            .subscribeOn(Schedulers.io())
+            .map {
+                it.toLowerCase(Locale.getDefault()).trim()
+            }
+            .debounce(800, TimeUnit.MILLISECONDS)
+            .filter {
+                //Если в поиске пустое поле, возвращаем список фильмов по умолчанию
+                viewModel.getFilms()
+                it.isNotBlank()
+            }
+            .flatMap {
+                viewModel.getSearchResult(it)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = {
+                    Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
+                },
+                onNext = {
+                    filmsAdapter.addItems(it)
+                }
+            )
+            .addTo(autoDisposable)
+
+        initPullToRefresh()
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
+
         binding.mainRecycler.apply {
             //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
             //оставим его пока пустым, он нам понадобится во второй части задания
@@ -79,35 +132,6 @@ class HomeFragment : Fragment() {
             addItemDecoration(decorator)
 
         }
-        binding.searchView.setOnClickListener {
-            binding.searchView.isIconified = false
-        }
-        //Подключаем слушателя изменений введенного текста в поиска
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-            //Этот метод отрабатывает на каждое изменения текста
-            override fun onQueryTextChange(newText: String?): Boolean {
-                //Если ввод пуст то вставляем в адаптер всю БД
-                if (newText == null || newText.isEmpty()) {
-                    filmsAdapter.addItems(filmsDataBase)
-                    return true
-                }
-                //Фильтруем список на поискк подходящих сочетаний
-                val result = filmsDataBase.filter {
-                    //Чтобы все работало правильно, нужно и запрос, и имя фильма приводить к нижнему регистру
-                    it.title.lowercase(Locale.getDefault()).contains(newText.lowercase(Locale.getDefault()))
-                }
-                //Добавляем в адаптер
-                filmsAdapter.addItems(result)
-                return true
-            }
-        })
-        initPullToRefresh()
-        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
-
         viewModel.filmsListData
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
