@@ -2,17 +2,17 @@ package com.example.project.di
 
 import com.example.project.di.modules.DatabaseModule
 import com.example.project.di.modules.DomainModule
-import com.example.project.di.modules.RemoteModule
 import com.example.project.viewmodel.HomeFragmentViewModel
 import com.example.project.viewmodel.SettingsFragmentViewModel
+import com.example.remote_module.RemoteProvider
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     //Внедряем все модули, нужные для этого компонента
+    dependencies = [RemoteProvider::class],
     modules = [
-        RemoteModule::class,
         DatabaseModule::class,
         DomainModule::class
     ]
