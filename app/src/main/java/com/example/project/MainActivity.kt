@@ -1,5 +1,8 @@
 package com.example.project
 
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.ActivityMainBinding
 import com.example.project.data.entity.Film
+import com.example.project.receivers.ConnectionChecker
 import com.example.project.view.fragments.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var receiver: BroadcastReceiver
     private var backPress = 0L
     var fileFavList = listOf<Film>()
     var pageView = 1
@@ -35,6 +40,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        receiver = ConnectionChecker()
+        val filters = IntentFilter().apply {
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_BATTERY_LOW)
+        }
+        registerReceiver(receiver, filters)
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
             Log.d("YAYAYA", "${it.itemId}")
@@ -124,5 +136,10 @@ class MainActivity : AppCompatActivity() {
 //    }
     companion object{
         const val TIME_INTERVAL = 2000
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 }
