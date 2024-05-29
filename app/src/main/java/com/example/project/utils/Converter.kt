@@ -1,11 +1,11 @@
 package com.example.project.utils
 
 import com.example.project.data.entity.Film
-import com.example.project.data.entity.TmdbFilm
+import com.example.remote_module.entity.TmdbFilm
 
 object Converter {
 
-    fun convertApiListToDtoList(list: List<TmdbFilm>?): List<Film> {
+    fun convertApiListToDtoList(list: List<com.example.remote_module.entity.TmdbFilm>?): List<Film> {
         val result = mutableListOf<Film>()
         list?.forEach {
             result.add(Film(

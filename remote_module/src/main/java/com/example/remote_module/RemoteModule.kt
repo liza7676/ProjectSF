@@ -1,8 +1,7 @@
-package com.example.project.di.modules
+package com.example.remote_module
 
-import com.example.project.BuildConfig
-import com.example.project.data.ApiConstants
-import com.example.project.data.TmdbApi
+
+import com.example.remote_module.entity.ApiConstants
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
