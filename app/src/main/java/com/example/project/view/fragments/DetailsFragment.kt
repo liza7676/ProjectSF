@@ -22,6 +22,7 @@ import com.example.project.R
 import com.example.project.data.ApiConstants
 import com.example.project.databinding.FragmentDetailsBinding
 import com.example.project.data.entity.Film
+import com.example.project.view.notifications.NotificationHelper
 import com.example.project.viewmodel.DetailsFragmentViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -92,6 +93,9 @@ class DetailsFragment : Fragment() {
         }
         binding.detailsFabDownloadWp.setOnClickListener {
             performAsyncLoadOfPoster()
+        }
+        binding.detailsFabWatchLater.setOnClickListener {
+            NotificationHelper.createNotification(requireContext(), film)
         }
     }
     //Узнаем, было ли получено разрешение ранее
