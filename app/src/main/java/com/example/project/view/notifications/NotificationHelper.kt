@@ -1,12 +1,18 @@
 package com.example.project.view.notifications
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.DatePickerDialog
 import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.icu.util.Calendar
+import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -17,12 +23,15 @@ import com.example.project.data.entity.Film
 import com.example.remote_module.entity.ApiConstants
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.project.data.Alarm
+import com.example.project.data.ListAlarm
+import com.example.project.data.ListAlarm.gatListAlarm
+import com.example.project.receivers.ReminderBroadcast
 import com.example.project.view.fragments.DetailsFragment
 
 object NotificationHelper {
     fun createNotification(context: Context, film: Film) {
         val mIntent = Intent(context, MainActivity::class.java)
-
         val pendingIntent =
             PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_IMMUTABLE)
         val builder = NotificationCompat.Builder(context!!, NotificationConstants.CHANNEL_ID).apply {
@@ -68,5 +77,77 @@ object NotificationHelper {
             })
 //Отправляем изначальную нотификацию в стандартном исполнении
         notificationManager.notify(film.id, builder.build())
+    }
+
+    fun notificationSet(context: Context, film: Film) {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        DatePickerDialog(
+            context,
+            { _, dpdYear, dpdMonth, dayOfMonth ->
+                val timeSetListener =
+                    TimePickerDialog.OnTimeSetListener { _, hourOfDay, pickerMinute ->
+                        val pickedDateTime = Calendar.getInstance()
+                        pickedDateTime.set(
+                            dpdYear,
+                            dpdMonth,
+                            dayOfMonth,
+                            hourOfDay,
+                            pickerMinute,
+                            0
+                        )
+                        val dateTimeInMillis = pickedDateTime.timeInMillis
+                        //После того, как получим время, вызываем метод, который создаст Alarm
+                        createWatchLaterEvent(context, dateTimeInMillis, film)
+
+                        //сохранение нотификации в списке
+                        // для отображение во фрагменте Посмотреть позже
+                        val listAlarm = gatListAlarm()
+                        listAlarm.add(Alarm( film.title, pickedDateTime))
+                    }
+
+                TimePickerDialog(
+                    context,
+                    timeSetListener,
+                    currentHour,
+                    currentMinute,
+                    true
+                ).show()
+
+            },
+            currentYear,
+            currentMonth,
+            currentDay
+        ).show()
+    }
+    @SuppressLint("ScheduleExactAlarm")
+    private fun createWatchLaterEvent(context: Context, dateTimeInMillis: Long, film: Film) {
+        //Получаем доступ к AlarmManager
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        //Создаем интент для запуска ресивера
+        val intent = Intent(film.title, null, context, ReminderBroadcast()::class.java)
+        //Кладем в него фильм
+        val bundle = Bundle()
+        bundle.putParcelable(NotificationConstants.FILM_KEY, film)
+        intent.putExtra(NotificationConstants.FILM_BUNDLE_KEY, bundle)
+        //Создаем пендинг интент для запуска извне приложения
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        //Устанавливаем Alarm
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            dateTimeInMillis,
+            pendingIntent
+        )
     }
 }
