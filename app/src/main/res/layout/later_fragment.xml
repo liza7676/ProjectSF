@@ -10,12 +10,13 @@
     android:id="@+id/watch_later"
     tools:context=".view.fragments.LaterFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favorites_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/film_item"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+<TextView
+    android:id="@+id/list_films"
+    android:text="No alarm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
 
+    />
 
 </FrameLayout>

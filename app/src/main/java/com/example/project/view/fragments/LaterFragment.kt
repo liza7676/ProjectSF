@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.project.data.ListAlarm
 import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.databinding.LaterFragmentBinding
 import com.example.project.utils.AnimationHelper
@@ -29,6 +30,15 @@ class LaterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         AnimationHelper.performFragmentCircularRevealAnimation(binding.watchLater, requireActivity(), 3)
-
+        ListAlarm.updateList()
+        val listAlarm = ListAlarm.gatListAlarm()
+        var str = ""
+        listAlarm.forEach{
+            str += it.name
+            str += " "
+            str += it.date.getTime().toString()
+            str += "\n"
+        }
+        binding.listFilms.text = str
     }
 }
