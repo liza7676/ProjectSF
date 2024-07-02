@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.MainActivity
+import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.view.rv_adapters.TopSpacingItemDecoration
 import com.example.project.databinding.FragmentFavoritesBinding
 import com.example.project.data.entity.Film

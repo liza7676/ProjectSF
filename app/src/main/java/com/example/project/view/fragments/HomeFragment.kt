@@ -10,8 +10,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.MainActivity
+import com.example.project.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.project.view.rv_adapters.TopSpacingItemDecoration
 import com.example.project.databinding.FragmentHomeBinding
 import com.example.project.data.entity.Film
@@ -25,7 +25,6 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import java.util.*
 import java.util.concurrent.TimeUnit
 
