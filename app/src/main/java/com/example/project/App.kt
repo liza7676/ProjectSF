@@ -13,7 +13,7 @@ import com.example.remote_module.DaggerRemoteComponent
 
 class App : Application() {
     lateinit var dagger: AppComponent
-
+    var isPromoShown = false
     override fun onCreate() {
         super.onCreate()
         //Инициализируем экземпляр App, через который будем получать доступ к остальным переменным

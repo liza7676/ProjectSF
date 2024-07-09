@@ -9,6 +9,13 @@
     android:id="@+id/activity"
     tools:context=".MainActivity">
 
+    <com.example.project.viewmodel.PromoView
+     android:id="@+id/promo_view_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:translationZ="10dp"
+        android:visibility="gone" />
     <FrameLayout
         android:id="@+id/fragment_placeholder"
         android:background="@drawable/corner_background"
