@@ -28,6 +28,24 @@ android {
             debuggable true
             minifyEnabled false
         }
+        basic {
+            manifestPlaceholders dimension: 'version'
+            debuggable true
+            applicationIdSuffix '.basic'
+            versionNameSuffix '-basic'
+            jniDebuggable true
+            renderscriptDebuggable true
+            signingConfig signingConfigs.debug
+        }
+        pro {
+            manifestPlaceholders dimension: 'version'
+            debuggable true
+            applicationIdSuffix '.pro'
+            versionNameSuffix '-pro'
+            jniDebuggable true
+            renderscriptDebuggable true
+            signingConfig signingConfigs.debug
+        }
         release {
             debuggable false
             minifyEnabled true
@@ -44,6 +62,19 @@ android {
         viewBinding true
         dataBinding true
         buildConfig true
+    }
+    flavorDimensions 'version'
+    sourceSets {
+        basic {
+            java {
+                srcDirs 'src\\basic\\java'
+            }
+        }
+        pro {
+            java {
+                srcDirs 'src\\pro\\java'
+            }
+        }
     }
 }
 

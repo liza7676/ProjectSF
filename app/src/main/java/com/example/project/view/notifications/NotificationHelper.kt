@@ -17,17 +17,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
-import com.example.project.MainActivity
 import com.example.project.R
 import com.example.project.data.entity.Film
 import com.example.remote_module.entity.ApiConstants
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.project.MainActivity
 import com.example.project.data.Alarm
-import com.example.project.data.ListAlarm
 import com.example.project.data.ListAlarm.gatListAlarm
 import com.example.project.receivers.ReminderBroadcast
-import com.example.project.view.fragments.DetailsFragment
 
 object NotificationHelper {
     fun createNotification(context: Context, film: Film) {
